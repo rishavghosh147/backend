@@ -13,10 +13,6 @@ class User_login(Resource): #done
         data=json.loads(request.data)
         otp=random.randint(100000,999999)
 
-        previous=Temp_otp.query.filter_by(login_email=data['email']).first()
-        if previous:
-            db.session.delete(previous)
-
         if 'roll' in data:
             check=User.query.filter_by(roll=data['roll']).first()
             if check and check_password_hash(check.password,data['password']):
@@ -36,15 +32,19 @@ class User_login(Resource): #done
             else:
                 return jsonify({"error":"user does not exist"})
             
-            msg="this {otp} is for login veification. please don't share with any one"
-            send_otp('login verification',email,msg)
-            save_otp=Temp_otp(login_email=email,otp=otp)
-            db.session.add(save_otp)
-            db.session.commit()
-            message={"successful":"please enter the otp"}
-            resp=make_response(jsonify(message))
-            resp.headers.set('veification',f'{self.login_token(email,role)}')
-            return resp
+        previous=Temp_otp.query.filter_by(login_email=email).first()
+        if previous:
+            db.session.delete(previous)
+            
+        msg="this {otp} is for login veification. please don't share with any one"
+        # send_otp('login verification',email,msg)
+        save_otp=Temp_otp(login_email=email,otp=otp)
+        db.session.add(save_otp)
+        db.session.commit()
+        message={"successful":"please enter the otp"}
+        resp=make_response(jsonify(message))
+        resp.headers.set('veification',f'{self.login_token(email,role)}')
+        return resp
     
     def login_token(self,email,role):
         payload={"email":f'{email}',"role":f'{role}',"login":True}

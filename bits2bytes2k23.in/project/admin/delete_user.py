@@ -5,7 +5,6 @@ from authentication.token_validation import token_validation_admin
 from flask_restful import Resource
 import jwt
 from key.keys import admin_secret_key,authorization_token_key
-from authentication.return_respose import response
 
 class delete_user(Resource): #done
     @token_validation_admin

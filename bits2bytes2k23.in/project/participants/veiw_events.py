@@ -2,7 +2,6 @@ from app import app
 from database.database import Event
 from flask import jsonify
 from flask_restful import Resource
-from authentication.return_respose import response
 
 class veiw_events(Resource): #done
     def post(self):
@@ -16,5 +15,5 @@ class veiw_events(Resource): #done
                 "about_event":x.about_event,
                 "type":x.team
             })
-        return response(jsonify(events),200)
+        return jsonify(events)
    

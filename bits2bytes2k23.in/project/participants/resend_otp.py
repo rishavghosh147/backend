@@ -7,7 +7,6 @@ from key.keys import otp_virify_secret_key
 from database.database import Temp_otp,Temp_user,db
 import random
 from authentication.send_otp import send_otp
-from authentication.return_respose import response
 from key.keys import otp_virify_secret_key
 
 class resend_otp(Resource): #done
@@ -25,7 +24,7 @@ class resend_otp(Resource): #done
             send_otp('login verification',data['email'],msg)
             response=make_response(jsonify({"successful":"otp has been resend"}))
             response.headers.set('login',header)
-            return response(response,200)
+            return response
         elif 'signup' in type:
             header=request.headers.get('signup')
             data=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])
@@ -36,7 +35,7 @@ class resend_otp(Resource): #done
             send_otp('sign up verification',data['email'],msg)
             response=make_response(jsonify({"successful":"otp has been resend"}))
             response.headers.set('signup',header)
-            return response(response,200)
+            return response
         elif 'forget' in type:
             header=request.headers.get('forget')
             data=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])
@@ -47,6 +46,6 @@ class resend_otp(Resource): #done
             send_otp('forget password verification',data['email'],msg)
             response=make_response(jsonify({"successful":"otp has been resend"}))
             response.headers.set('login',header)
-            return response(response,200)
+            return response
         else:
-            return response(jsonify({"error":"invalid request !!!"}),400)
+            return jsonify({"error":"invalid request !!!"})

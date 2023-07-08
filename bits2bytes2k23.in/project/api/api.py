@@ -20,8 +20,10 @@ from admin.veiw_deleted_user import veiw_deleted_user
 from admin.veiw_participents import veiw_participents
 from admin.post_winers import winers
 from image_send.send_image import send_image
+from flask_cors import CORS
 
 api=Api(app)
+CORS(app)
 
 api.add_resource(User_login,'/login/') #this api is used for user login 1
 api.add_resource(user_signup,'/user_signup/') #this api is used for user sign up 1

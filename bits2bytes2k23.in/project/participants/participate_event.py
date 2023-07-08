@@ -6,7 +6,6 @@ from flask_restful import Resource
 import jwt
 from key.keys import participants_secret_key,authorization_token_key
 from sqlalchemy import text
-from authentication.return_respose import response
 
 class Participate(Resource): #done
     @token_validation_participents
@@ -24,7 +23,7 @@ class Participate(Resource): #done
             event=Participants(roll=roll_obj.roll,event_name=data['event_name'])
             db.session.add(event)
             db.session.commit()
-        return response(jsonify({"successfull":"participated successfully"}),200)
+        return jsonify({"successfull":"participated successfully"})
 
 
   

@@ -4,7 +4,6 @@ from flask import json,request,jsonify,send_file
 from authentication.token_validation import token_validation_admin
 from database.database import Event,Team_participate,Participants,User
 import pandas as pd
-from authentication.return_respose import response
 
 class Download_by_admin(Resource): #done
     @token_validation_admin
@@ -43,4 +42,4 @@ class Download_by_admin(Resource): #done
         filename='event_details/'+data['event_name']+'.xlsx'
         df=pd.DataFrame(xl)
         df.to_excel(filename,index=False)
-        return response(send_file(filename,as_attachment=True),200)
+        return send_file(filename,as_attachment=True)

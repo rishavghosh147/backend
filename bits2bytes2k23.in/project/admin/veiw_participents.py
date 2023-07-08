@@ -4,7 +4,6 @@ from flask import request,jsonify
 from authentication.token_validation import token_validation_admin
 from database.database import Participants,User,db,Event,Team_participate
 from flask_restful import Resource
-from authentication.return_respose import response
 
 class veiw_participents(Resource): #done
     @token_validation_admin
@@ -30,7 +29,7 @@ def common(data):
             'year': user.year,
             'stream': user.stream
         })
-        return response(jsonify(participants),200)
+        return jsonify(participants)
     else:
         roll=Team_participate.query.filter_by(event_name=data['event_name']).order_by(Team_participate.team_name).all()
         for x in roll:
@@ -44,5 +43,5 @@ def common(data):
             'stream': user.stream,
             'team_name': x.team_name
         })
-    return response(jsonify(participants),200)
+    return jsonify(participants)
     

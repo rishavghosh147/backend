@@ -7,7 +7,6 @@ import jwt,random
 from flask_restful import Resource
 from authentication.send_otp import send_otp
 from key.keys import otp_virify_secret_key
-from authentication.return_respose import response
 
 class User_login(Resource): #done 
     def post(self):
@@ -24,18 +23,18 @@ class User_login(Resource): #done
                 email=check.email
                 role=check.role_id
             elif check and not check_password_hash(check.password,data['password']):
-                return response(jsonify({"error":"you entered a wrong password"}),401)
+                return jsonify({"error":"you entered a wrong password"})
             else:
-                return response(jsonify({"error":"user does not exist"}),204)
+                return jsonify({"error":"user does not exist"})
         else:
             check=User.query.filter_by(email=data['email'].lower()).first()
             if check and check_password_hash(check.password,data['password']):
                 email=data['email']
                 role=check.role_id
             elif check and not check_password_hash(check.password,data['password']):
-                return response(jsonify({"error":"you entered a wrong password"}),401)
+                return jsonify({"error":"you entered a wrong password"})
             else:
-                return response(jsonify({"error":"user does not exist"}),204)
+                return jsonify({"error":"user does not exist"})
             
             msg="this {otp} is for login veification. please don't share with any one"
             send_otp('login verification',email,msg)
@@ -45,7 +44,7 @@ class User_login(Resource): #done
             message={"successful":"please enter the otp"}
             resp=make_response(jsonify(message))
             resp.headers.set('veification',f'{self.login_token(email,role)}')
-            return response(resp,200)
+            return resp
     
     def login_token(self,email,role):
         payload={"email":f'{email}',"role":f'{role}',"login":True}

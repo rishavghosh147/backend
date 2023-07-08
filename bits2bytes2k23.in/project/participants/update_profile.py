@@ -5,7 +5,6 @@ from key.keys import authorization_token_key,participants_secret_key
 import jwt
 from database.database import db,User
 from authentication.token_validation import token_validation_participents
-from authentication.return_respose import response
 
 class update_profile(Resource): #done
     @token_validation_participents
@@ -21,6 +20,6 @@ class update_profile(Resource): #done
             user.stream=data['stream']
             user.year=data['year']
             db.session.commit()
-            return response(jsonify({"successful":"profile updated successfully"}),200)
+            return jsonify({"successful":"profile updated successfully"})
         else:
-            return response(jsonify({"error":"the data is not valid"}),204)
+            return jsonify({"error":"the data is not valid"})

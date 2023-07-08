@@ -5,7 +5,6 @@ from database.database import Temp_user, User,db,Temp_otp,Participants
 import jwt
 from datetime import datetime, timedelta
 from key.keys import otp_virify_secret_key,admin_secret_key,participants_secret_key,authorization_token_key
-from authentication.return_respose import response
 
 class otp_verify(Resource): #done
     def post(self):
@@ -19,7 +18,7 @@ class otp_verify(Resource): #done
         try:
             verify_type=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])
         except:
-            return response(jsonify({"error":"you are not permited"}),401)
+            return jsonify({"error":"you are not permited"})
         print('signup' in verify_type)
         if 'signup' in verify_type:
             user=Temp_user.query.filter_by(email=verify_type['email']).first()
@@ -28,7 +27,7 @@ class otp_verify(Resource): #done
                 db.session.add(users)
                 db.session.delete(user)
                 db.session.commit()
-                return response(jsonify({"success":"user registered successfully "}),200)
+                return jsonify({"success":"user registered successfully "})
         elif 'login' in verify_type:
             otp=Temp_otp.query.filter_by(login_email=verify_type['email']).first()
             if otp and otp.otp==data['otp']:
@@ -51,8 +50,8 @@ class otp_verify(Resource): #done
                 user.password=otp.password
                 db.session.delete(otp)
                 db.session.commit()
-                return response(jsonify({"successful":"the password has been changed successfully"}),200)
-        return response(jsonify({"error":"you entered a wrong otp !!!"}),403)
+                return jsonify({"successful":"the password has been changed successfully"})
+        return jsonify({"error":"you entered a wrong otp !!!"})
     
     def token_gen(self,email,secret_key):
         time=datetime.now()+timedelta(minutes=30)

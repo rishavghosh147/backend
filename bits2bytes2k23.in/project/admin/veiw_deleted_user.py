@@ -3,7 +3,6 @@ from database.database import Deleted_users,db
 from flask_restful import Resource
 from flask import jsonify
 from authentication.token_validation import token_validation_admin
-from authentication.return_respose import response
 
 class veiw_deleted_user(Resource): #done
     @token_validation_admin
@@ -21,4 +20,4 @@ class veiw_deleted_user(Resource): #done
                 "stream":x.stream,
                 "deleted_by":x.deleted_by
                 })
-        return response(jsonify(users),200)
+        return jsonify(users)

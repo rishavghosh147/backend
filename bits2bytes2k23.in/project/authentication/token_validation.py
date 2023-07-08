@@ -4,7 +4,6 @@ from flask import request, jsonify
 import jwt
 from datetime import datetime
 from key.keys import admin_secret_key,participants_secret_key,authorization_token_key
-from authentication.return_respose import response
 
 def token_validation_participents(f):
     @wraps(f)
@@ -31,10 +30,10 @@ def expire():
 def aurtharization(secret_key):
     token=request.headers.get(authorization_token_key)
     if not token:
-        return response(jsonify({'error':'the token is missing !!!'}),401)
+        return jsonify({'error':'the token is missing !!!'})
     try:
         data=jwt.decode(token,secret_key,algorithms=['HS256'])
         if data['expire']< expire():
-            return response(jsonify({"error":"login expire !!!"}),403)
+            return jsonify({"error":"login expire !!!"})
     except:
-        return response(jsonify({"error":"the token is not valid !!!"}),403)
+        return jsonify({"error":"the token is not valid !!!"})

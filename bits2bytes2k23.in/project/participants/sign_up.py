@@ -8,7 +8,6 @@ from authentication.send_otp import send_otp
 from flask_restful import Resource
 import jwt
 from key.keys import otp_virify_secret_key,secret_key
-from authentication.return_respose import response
 
 class user_signup(Resource): #done 
     
@@ -21,9 +20,9 @@ class user_signup(Resource): #done
                 if data['secret_key']==secret_key:
                     role=0
                 else:
-                    return response(jsonify({'error':'please contact rishav ghosh for secret key'}),403)
+                    return jsonify({'error':'please contact rishav ghosh for secret key'})
         else:
-            return response(jsonify({'error':'the data is not valid !!!'}),204)
+            return jsonify({'error':'the data is not valid !!!'})
 
         if 'roll' in data:
             roll=data['roll']
@@ -31,7 +30,7 @@ class user_signup(Resource): #done
             roll=-0
         result=check_user(data['email'],data['mobile'],roll)
         if result:
-            return response(jsonify({"error": "this user is already exist !!!"}),400)
+            return jsonify({"error": "this user is already exist !!!"})
 
 
         self.temp(data,role)
@@ -39,7 +38,7 @@ class user_signup(Resource): #done
         token=self.otp_token(payload)
         response=jsonify({'successful':'please enter the otp'})
         response.headers.set('verfication',f'{token}')
-        return response(response,200)
+        return response
 
     def temp(self,data,role):
         otp=random.randint(100000,999999)

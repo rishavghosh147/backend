@@ -19,6 +19,6 @@ class delete_user(Resource): #done
             db.session.add(temp_user)
             db.session.delete(user)
             db.session.commit()
-            return response(jsonify({'message':'user deleted successfully'}),200)
+            return jsonify({'message':'user deleted successfully'})
         else:
-            return response(jsonify({'error':'user does not exist'}),204)
+            return jsonify({'error':'user does not exist'})

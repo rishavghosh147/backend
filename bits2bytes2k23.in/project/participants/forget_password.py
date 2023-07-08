@@ -6,7 +6,6 @@ from werkzeug.security import generate_password_hash
 from database.database import User,db,Temp_otp
 import random,jwt
 from key.keys import otp_virify_secret_key
-from authentication.return_respose import response
 
 class forget_password(Resource): #done
     def post(self):
@@ -28,4 +27,4 @@ class forget_password(Resource): #done
             response.headers.set('verification',token)
             return response(response,200)
         else:
-            return response(jsonify({"error":"user does not exist"}),400)
+            return jsonify({"error":"user does not exist"})

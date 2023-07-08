@@ -5,7 +5,6 @@ from flask import json,request
 import jwt
 from key.keys import participants_secret_key,authorization_token_key
 from authentication.token_validation import token_validation_participents
-from authentication.return_respose import response
 
 class praricipated_or_not(Resource): #done
     @token_validation_participents
@@ -18,12 +17,12 @@ class praricipated_or_not(Resource): #done
         if event.team==1:
             user=Team_participate.query.filter_by(roll=roll.roll).filter(Team_participate.event_name==data['event_name']).first()
             if user:
-                return response(True,200)
+                return True
             else:
-                return response(False,200)
+                return False
         else:
             user=Participants.query.filter(Participants.roll==roll.roll,Participants.event_name==data['event_name']).first()
             if user:
-                return response(True,200)
+                return True
             else:
-                return response(False,200)
+                return False

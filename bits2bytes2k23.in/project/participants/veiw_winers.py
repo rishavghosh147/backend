@@ -2,7 +2,6 @@ from app import app
 from flask_restful import Resource
 from flask import request,json,jsonify
 from database.database import Winers,User,Event,Team_participate
-from authentication.return_respose import response
 
 class win(Resource): #done
     def post(self):
@@ -34,5 +33,5 @@ class win(Resource): #done
                         "team_name":f"{x.team}",
                         "position":x.winers}
                     )
-        return response(jsonify(win),200)
+        return jsonify(win)
         

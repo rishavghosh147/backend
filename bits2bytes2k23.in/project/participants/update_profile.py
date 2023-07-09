@@ -15,9 +15,9 @@ class update_profile(Resource): #done
             user=User.query.filter_by(email=email).first()
             user.fname=data['fname']
             user.lname=data['lname']
-            user.mobile=data['mobile']
+            user.mobile=int(data['mobile'])
             user.stream=data['stream']
-            user.year=data['year']
+            user.year=int(data['year'])
             db.session.commit()
             return jsonify({"successful":"profile updated successfully"})
         elif len(data)==3 and data['fname'] and data['lname'] and data['mobile'] and type=="admin":
@@ -25,7 +25,7 @@ class update_profile(Resource): #done
             user=User.query.filter_by(email=email).first()
             user.fname=data['fname']
             user.lname=data['lname']
-            user.mobile=data['mobile']
+            user.mobile=int(data['mobile'])
             db.session.commit()
             return jsonify({"successful":"profile updated successfully"})
         else:

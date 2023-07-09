@@ -22,7 +22,7 @@ class otp_verify(Resource): #done
         print('signup' in verify_type)
         if 'signup' in verify_type:
             user=Temp_user.query.filter_by(email=verify_type['email']).first()
-            if user and user.otp==data['otp']:
+            if user and user.otp==int(data['otp']):
                 users=User(fname=user.fname,lname=user.lname,email=user.email,mobile=user.mobile,roll=user.roll,password=user.password,role_id=user.role_id,year=user.year,stream=user.stream)
                 db.session.add(users)
                 db.session.delete(user)
@@ -30,7 +30,7 @@ class otp_verify(Resource): #done
                 return jsonify({"success":"user registered successfully "})
         elif 'login' in verify_type:
             otp=Temp_otp.query.filter_by(login_email=verify_type['email']).first()
-            if otp and otp.otp==data['otp']:
+            if otp and otp.otp==int(data['otp']):
                 if verify_type['role']=="0":
                     secret_key=admin_secret_key
                 else:
@@ -45,7 +45,7 @@ class otp_verify(Resource): #done
                 return response 
         elif 'forget' in verify_type:
             otp=Temp_otp.query.filter_by(login_email=verify_type['email']).first()
-            if  otp and otp.otp==data['otp']:
+            if  otp and otp.otp==int(data['otp']):
                 user=User.query.filter_by(email=verify_type['email']).first()
                 user.password=otp.password
                 db.session.delete(otp)

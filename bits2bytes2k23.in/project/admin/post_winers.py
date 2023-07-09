@@ -13,10 +13,10 @@ class winers(Resource): #done
         else: 
             winer=data['winers']
         if 'roll' in data:
-            ch=Winers.query.filter(Winers.roll==data['roll'],Winers.event_name==data['event_name'],Winers.winers==winer)
+            ch=Winers.query.filter(Winers.roll==int(data['roll']),Winers.event_name==data['event_name'],Winers.winers==winer)
             if ch:
                 return jsonify({"error":"already exist"})
-            user=Winers(roll=data['roll'],event_name=data['event_name'],winers=winer)
+            user=Winers(roll=int(data['roll']),event_name=data['event_name'],winers=winer)
             db.session.add(user)
             db.session.commit()
             return jsonify({"success":"successfully added"})

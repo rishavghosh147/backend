@@ -23,6 +23,19 @@ def token_validation_admin(f):
         return f(*args,**kwargs)
     return validation
 
+def token_validation_common(f):
+    @wraps(f)
+    def validation(*args,**kwargs):
+        if not aurtharization(admin_secret_key):
+            type="admin"
+        elif not aurtharization(participants_secret_key):
+            type="participant"
+        else:
+            return jsonify({"error":"you are not verified"})
+        return f(*args,type=type,**kwargs)
+    return validation
+
+
 def expire():
     time=datetime.now()
     return int(time.timestamp())
@@ -37,3 +50,8 @@ def aurtharization(secret_key):
             return jsonify({"error":"login expire !!!"})
     except:
         return jsonify({"error":"the token is not valid !!!"})
+    
+def user_email(secret_key):
+    token=request.headers.get(authorization_token_key)
+    data=jwt.decode(token,secret_key,algorithms=['HS256'])
+    return data['email']

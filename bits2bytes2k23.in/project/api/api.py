@@ -20,6 +20,7 @@ from admin.veiw_deleted_user import veiw_deleted_user
 from admin.veiw_participents import veiw_participents
 from admin.post_winers import winers
 from image_send.send_image import send_image
+from participants.user_type import User_type
 from flask_cors import CORS
 
 api=Api(app)
@@ -44,3 +45,4 @@ api.add_resource(veiw_participents,'/veiw_participents/') #this api is for veiw 
 api.add_resource(Download_by_admin,'/download_by_admin/') #this api is for download participants details on a particular event 1
 api.add_resource(win,'/veiw_winers/') #this api is for veiw the winer of a particular event 1
 api.add_resource(winers,'/post_winers/') #this api is for post winer by admin 1
+api.add_resource(User_type,'/user_type/') #this api is for check the user admin or participant

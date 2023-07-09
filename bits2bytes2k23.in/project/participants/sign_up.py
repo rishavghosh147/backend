@@ -25,10 +25,10 @@ class user_signup(Resource): #done
             return jsonify({'error':'the data is not valid !!!'})
 
         if 'roll' in data:
-            roll=data['roll']
+            roll=int(data['roll'])
         else:
             roll=-0
-        result=check_user(data['email'],data['mobile'],roll)
+        result=check_user(data['email'],int(data['mobile']),roll)
         if result:
             return jsonify({"error": "this user is already exist !!!"})
 
@@ -45,18 +45,18 @@ class user_signup(Resource): #done
         hash_password=generate_password_hash(data['password'])
 
         if 'roll' in data:
-            roll=data['roll']
+            roll=int(data['roll'])
         else:
             roll=121
-        user=Temp_user.query.filter(or_(Temp_user.email==data['email'].lower(),Temp_user.mobile==data['mobile'],Temp_user.roll==roll)).all()
+        user=Temp_user.query.filter(or_(Temp_user.email==data['email'].lower(),Temp_user.mobile==int(data['mobile']),Temp_user.roll==roll)).all()
         for x in user:
             db.session.delete(x)
             db.session.commit()
             
         if role==0:
-            user=Temp_user(fname=data['fname'].lower(),lname=data['lname'].lower(),email=data['email'].lower(),mobile=data['mobile'],password=hash_password,role_id=role,otp=otp)
+            user=Temp_user(fname=data['fname'].lower(),lname=data['lname'].lower(),email=data['email'].lower(),mobile=int(data['mobile']),password=hash_password,role_id=role,otp=otp)
         if role==2:
-            user=Temp_user(fname=data['fname'].lower(),lname=data['lname'].lower(),email=data['email'].lower(),mobile=data['mobile'],roll=data['roll'],password=hash_password,role_id=role,year=data['year'],stream=data['stream'].lower(),otp=otp)
+            user=Temp_user(fname=data['fname'].lower(),lname=data['lname'].lower(),email=data['email'].lower(),mobile=int(data['mobile']),roll=int(data['roll']),password=hash_password,role_id=role,year=int(data['year']),stream=data['stream'].lower(),otp=otp)
 
         msg=f"hello, {data['fname']} this otp {otp} is for sign up verification. Please don't share it with anyone and also don't share your password."
         send_otp('for sign_up verification',data['email'],msg)

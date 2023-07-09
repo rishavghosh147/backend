@@ -14,7 +14,7 @@ class User_login(Resource): #done
         otp=random.randint(100000,999999)
 
         if 'roll' in data:
-            check=User.query.filter_by(roll=data['roll']).first()
+            check=User.query.filter_by(roll=int(data['roll'])).first()
             if check and check_password_hash(check.password,data['password']):
                 email=check.email
                 role=check.role_id
@@ -37,7 +37,7 @@ class User_login(Resource): #done
             db.session.delete(previous)
             
         msg="this {otp} is for login veification. please don't share with any one"
-        # send_otp('login verification',email,msg)
+        send_otp('login verification',email,msg)
         save_otp=Temp_otp(login_email=email,otp=otp)
         db.session.add(save_otp)
         db.session.commit()

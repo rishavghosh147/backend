@@ -21,10 +21,9 @@ class forget_password(Resource): #done
             db.session.commit()
             msg="hi,{user.fname} this {otp} is for forget password"
             send_otp('forget password',data['email'],msg)
-            response=make_response(jsonify({"successful":"please enter the otp"}))
             payload={"email":f"{data['email']}","forget":True}
             token=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
-            response.headers.set('verification',token)
-            return response(response,200)
+            response=make_response(jsonify({"successful":"please enter the otp","verification":token}))
+            return response
         else:
             return jsonify({"error":"user does not exist"})

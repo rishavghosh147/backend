@@ -32,3 +32,4 @@ tzdata==2023.3
 update==0.0.1
 Werkzeug==2.3.6
 WTForms==3.0.1
+djangorestframework-jwt==1.11.0

@@ -12,40 +12,31 @@ from key.keys import otp_virify_secret_key
 class resend_otp(Resource): #done
     def post(self):
         type=request.headers.get('verification')
-        head=jwt.decode(type,otp_virify_secret_key,algorithms=['HS256'])
+        header=jwt.decode(type,otp_virify_secret_key,algorithms=['HS256'])
         otp=random.randint(100000,999999)
-        if 'login' in type:
-            header=request.headers.get('login')
-            data=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])
-            user=Temp_otp.query.filter_by(login_email=data['email']).first()
+        if 'login' in header:
+            user=Temp_otp.query.filter_by(login_email=header['email']).first()
             user.otp=otp
             db.session.commit()
             msg="this {otp} is for login veification. please don't share with any one"
-            send_otp('login verification',data['email'],msg)
-            response=make_response(jsonify({"successful":"otp has been resend"}))
-            response.headers.set('login',header)
+            send_otp('login verification',header['email'],msg)
+            response=make_response(jsonify({"successful":"otp has been resend","verification":type}))
             return response
-        elif 'signup' in type:
-            header=request.headers.get('signup')
-            data=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])
-            user=Temp_user.query.filter_by(email=data['email']).first()
+        elif 'signup' in header:
+            user=Temp_user.query.filter_by(email=header['email']).first()
             user.otp=otp
             db.session.commit()
             msg="this {otp} is for sign up veification. please don't share with any one"
-            send_otp('sign up verification',data['email'],msg)
-            response=make_response(jsonify({"successful":"otp has been resend"}))
-            response.headers.set('signup',header)
+            send_otp('sign up verification',header['email'],msg)
+            response=make_response(jsonify({"successful":"otp has been resend","verification":header}))
             return response
-        elif 'forget' in type:
-            header=request.headers.get('forget')
-            data=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])
-            user=Temp_otp.query.filter_by(login_email=data['email']).first()
+        elif 'forget' in header:
+            user=Temp_otp.query.filter_by(login_email=header['email']).first()
             user.otp=otp
             db.session.commit()
             msg="this {otp} is for forget password. please don't share with any one"
-            send_otp('forget password verification',data['email'],msg)
-            response=make_response(jsonify({"successful":"otp has been resend"}))
-            response.headers.set('login',header)
+            send_otp('forget password verification',header['email'],msg)
+            response=make_response(jsonify({"successful":"otp has been resend","verificaion":header}))
             return response
         else:
             return jsonify({"error":"invalid request !!!"})

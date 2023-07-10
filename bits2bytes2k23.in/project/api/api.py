@@ -24,7 +24,8 @@ from participants.user_type import User_type
 from flask_cors import CORS
 
 api=Api(app)
-CORS(app)
+# CORS(app)
+CORS(app, resources={r"/*":{"origins": "localhost"}}, methods=['POST'], headers=['Content-Type'])
 
 api.add_resource(User_login,'/login/') #this api is used for user login 1
 api.add_resource(user_signup,'/user_signup/') #this api is used for user sign up 1

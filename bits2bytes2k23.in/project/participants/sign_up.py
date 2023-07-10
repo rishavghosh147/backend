@@ -1,5 +1,5 @@
 from app import app
-from flask import json,jsonify,request
+from flask import json,jsonify,request,make_response
 from database.database import Temp_user,db,User,Temp_otp
 from sqlalchemy import or_
 import random
@@ -36,8 +36,16 @@ class user_signup(Resource): #done
         self.temp(data,role)
         payload={"email":f"{data['email']}","signup":True}
         token=self.otp_token(payload)
-        response=jsonify({'successful':'please enter the otp'})
-        response.headers.set('verfication',f'{token}')
+
+        # response=jsonify({'successful':'please enter the otp'}) #1
+        # response.headers['verfication']=token #1
+
+        # response=jsonify({'successful':'please enter the otp'}) 2
+        # response.headers.set('verfication',f'{token}') 2
+
+        response=make_response(jsonify({'successful':'please enter the otp','verification':f'{token}'})) #3
+        # response.headers['verfication']=f'{token}' #3
+
         return response
 
     def temp(self,data,role):
@@ -59,7 +67,7 @@ class user_signup(Resource): #done
             user=Temp_user(fname=data['fname'].lower(),lname=data['lname'].lower(),email=data['email'].lower(),mobile=int(data['mobile']),roll=int(data['roll']),password=hash_password,role_id=role,year=int(data['year']),stream=data['stream'].lower(),otp=otp)
 
         msg=f"hello, {data['fname']} this otp {otp} is for sign up verification. Please don't share it with anyone and also don't share your password."
-        send_otp('for sign_up verification',data['email'],msg)
+        # send_otp('for sign_up verification',data['email'],msg)
         db.session.add(user)
         db.session.commit()
 

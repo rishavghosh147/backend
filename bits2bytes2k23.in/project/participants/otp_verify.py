@@ -10,10 +10,6 @@ class otp_verify(Resource): #done
     def post(self):
         if 'verification' in request.headers:
             header=request.headers.get('verification')
-        # elif 'login' in request.headers:
-        #     header=request.headers.get('login')
-        # else:
-        #     header=request.headers.get('forget')
         data=json.loads(request.data)
         try:
             verify_type=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])
@@ -39,9 +35,8 @@ class otp_verify(Resource): #done
                 token=self.token_gen(verify_type['email'],secret_key)
                 db.session.delete(otp)
                 db.session.commit()
-                msg=jsonify({"successful":"you are loged in successfully"})
+                msg=jsonify({"successful":"you are loged in successfully","authorization":token})
                 response=make_response(msg)
-                response.headers.set(authorization_token_key,token)
                 return response 
         elif 'forget' in verify_type:
             otp=Temp_otp.query.filter_by(login_email=verify_type['email']).first()

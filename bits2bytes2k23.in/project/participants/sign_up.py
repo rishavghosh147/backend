@@ -13,11 +13,10 @@ class user_signup(Resource): #done
     
     def post(self):
         data=json.loads(request.data)
-
         if 'roll' in data and data_validity(data,'roll'):
             role=2
         elif 'secret_key' in data and data_validity(data,'secret_key'):
-                if data['secret_key']==secret_key:
+                if int(data['secret_key'])==secret_key:
                     role=0
                 else:
                     return jsonify({'error':'please contact rishav ghosh for secret key'})
@@ -31,22 +30,13 @@ class user_signup(Resource): #done
         result=check_user(data['email'],int(data['mobile']),roll)
         if result:
             return jsonify({"error": "this user is already exist !!!"})
-
+        
 
         self.temp(data,role)
-        payload={"email":f"{data['email']}","signup":True}
+        payload={"email":data['email'],"signup":True}
         token=self.otp_token(payload)
 
-        # response=jsonify({'successful':'please enter the otp'}) #1
-        # response.headers['verfication']=token #1
-
-        # response=jsonify({'successful':'please enter the otp'}) 2
-        # response.headers.set('verfication',f'{token}') 2
-
-        response=make_response(jsonify({'successful':'please enter the otp','verification':token})) #3
-        # response.headers['verfication']=f'{token}' #3
-
-        return response
+        return jsonify({'successful':'please enter the otp','verification':token})
 
     def temp(self,data,role):
         otp=random.randint(100000,999999)

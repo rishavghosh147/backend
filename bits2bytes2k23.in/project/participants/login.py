@@ -36,7 +36,7 @@ class User_login(Resource): #done
         if previous:
             db.session.delete(previous)
             
-        msg="this {otp} is for login veification. please don't share with any one"
+        msg=f"this {otp} is for login veification. please don't share with any one"
         send_otp('login verification',email,msg)
         save_otp=Temp_otp(login_email=email,otp=otp)
         db.session.add(save_otp)

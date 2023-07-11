@@ -16,6 +16,6 @@ class veiw_profile(Resource): #done
         elif type=="admin":
             email=user_email(admin_secret_key)
             user=User.query.filter_by(email=email).first()
-            return jsonify({"fname":f"{user.fname}","lname":f"{user.lname}","email":email,"mobile":f"{user.mobile}"})
+            return jsonify({"fname":user.fname,"lname":user.lname,"email":email,"mobile":user.mobile})
         else:
             return jsonify({"error":"something went wrong !!!"})

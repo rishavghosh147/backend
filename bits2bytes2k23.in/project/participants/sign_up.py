@@ -43,7 +43,7 @@ class user_signup(Resource): #done
         # response=jsonify({'successful':'please enter the otp'}) 2
         # response.headers.set('verfication',f'{token}') 2
 
-        response=make_response(jsonify({'successful':'please enter the otp','verification':f'{token}'})) #3
+        response=make_response(jsonify({'successful':'please enter the otp','verification':token})) #3
         # response.headers['verfication']=f'{token}' #3
 
         return response
@@ -72,7 +72,8 @@ class user_signup(Resource): #done
         db.session.commit()
 
     def otp_token(self,payload):
-        return jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
+        bytecode=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
+        return  bytecode.decode('utf-8')
 
 def check_user(email,mobile,roll):
     user=User.query.filter(or_(User.email==email,User.mobile==mobile,User.roll==roll)).all()

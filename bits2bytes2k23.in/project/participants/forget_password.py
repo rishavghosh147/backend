@@ -14,33 +14,30 @@ class forget_password(Resource): #done
             user=User.query.filter_by(email=data['email'].lower()).first()
             if user and len(data)==2 and data['email'] and data['password']:
                 otp=random.randint(100000,999999)
-                check=Temp_otp.query.filter_by(login_email=data['email']).first()
+                check=Temp_otp.query.filter_by(login_email=data['email'].lower()).first()
                 if check:
                     db.session.delete(check)
-                us=Temp_otp(login_email=data['email'],otp=otp,password=generate_password_hash(data['password']))
+                us=Temp_otp(login_email=data['email'].lower(),otp=otp,password=generate_password_hash(data['password']))
                 db.session.add(us)
                 db.session.commit()
                 msg=f"hi,{user.fname} this {otp} is for forget password"
                 send_otp('forget password',data['email'],msg)
-                payload={"email":f"{data['email']}","forget":True}
+                payload={"email":data['email'].lower(),"forget":True}
                 token=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
-                response=make_response(jsonify({"successful":"please enter the otp","verification":token.decode('utf-8')}))
-                return response
+                return jsonify({"successful":"please enter the otp","verification":token.decode('utf-8')})
         elif 'roll' in data:
             user=User.query.filter_by(roll=int(data['roll'])).first()
             if user and len(data)==2 and data['roll'] and data['password']:
                 otp=random.randint(100000,999999)
-                check=Temp_otp.query.filter_by(login_email=data['email']).first()
+                check=Temp_otp.query.filter_by(login_email=user.email).first()
                 if check:
                     db.session.delete(check)
-                roll=User.query.filter_by(roll=int(data['roll'])).first()
-                us=Temp_otp(login_email=roll.email,otp=otp,password=generate_password_hash(data['password']))
+                us=Temp_otp(login_email=user.email,otp=otp,password=generate_password_hash(data['password']))
                 db.session.add(us)
                 db.session.commit()
                 msg=f"hi,{user.fname} this {otp} is for forget password"
                 send_otp('forget password',data['email'],msg)
-                payload={"email":roll.email,"forget":True}
+                payload={"email":user.email,"forget":True}
                 token=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
-                response=make_response(jsonify({"successful":"please enter the otp","verification":token.decode('utf-8')}))
-                return response
+                return jsonify({"successful":"please enter the otp","verification":token.decode('utf-8')})
         return jsonify({"error":"user does not exist"})

@@ -15,7 +15,6 @@ class otp_verify(Resource): #done
             verify_type=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])
         except:
             return jsonify({"error":"you are not permited"})
-        print('signup' in verify_type)
         if 'signup' in verify_type:
             user=Temp_user.query.filter_by(email=verify_type['email']).first()
             if user and user.otp==int(data['otp']):
@@ -32,16 +31,14 @@ class otp_verify(Resource): #done
                 else:
                     secret_key=participants_secret_key
 
-                token=self.token_gen(verify_type['email'],secret_key)
+                token=self.token_gen(verify_type['email'].lower(),secret_key)
                 db.session.delete(otp)
                 db.session.commit()
-                msg=jsonify({"successful":"you are loged in successfully","authorization":token})
-                response=make_response(msg)
-                return response 
+                return jsonify({"successful":"you are loged in successfully","authorization":token})
         elif 'forget' in verify_type:
-            otp=Temp_otp.query.filter_by(login_email=verify_type['email']).first()
+            otp=Temp_otp.query.filter_by(login_email=verify_type['email'].lower()).first()
             if  otp and otp.otp==int(data['otp']):
-                user=User.query.filter_by(email=verify_type['email']).first()
+                user=User.query.filter_by(email=verify_type['email'].lower()).first()
                 user.password=otp.password
                 db.session.delete(otp)
                 db.session.commit()
@@ -49,7 +46,8 @@ class otp_verify(Resource): #done
         return jsonify({"error":"you entered a wrong otp !!!"})
     
     def token_gen(self,email,secret_key):
-        time=datetime.now()+timedelta(minutes=30)
+        time=datetime.now()+timedelta(minutes=60)
         exp_time=int(time.timestamp())
-        payload={"email":f"{email}","expire":exp_time}
-        return jwt.encode(payload,secret_key,algorithm='HS256')
+        payload={"email":email,"expire":exp_time}
+        token=jwt.encode(payload,secret_key,algorithm='HS256')
+        return token.decode('utf-8')

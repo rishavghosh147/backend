@@ -25,7 +25,7 @@ class User_login(Resource): #done
         else:
             check=User.query.filter_by(email=data['email'].lower()).first()
             if check and check_password_hash(check.password,data['password']):
-                email=data['email']
+                email=data['email'].lower()
                 role=check.role_id
             elif check and not check_password_hash(check.password,data['password']):
                 return jsonify({"error":"you entered a wrong password"})
@@ -41,9 +41,7 @@ class User_login(Resource): #done
         save_otp=Temp_otp(login_email=email,otp=otp)
         db.session.add(save_otp)
         db.session.commit()
-        message={"successful":"please enter the otp","verification":self.login_token(email,role)}
-        resp=make_response(jsonify(message))
-        return resp
+        return jsonify({"successful":"please enter the otp","verification":self.login_token(email,role)})
     
     def login_token(self,email,role):
         payload={"email":f'{email}',"role":f'{role}',"login":True}

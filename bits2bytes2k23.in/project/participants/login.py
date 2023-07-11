@@ -41,11 +41,11 @@ class User_login(Resource): #done
         save_otp=Temp_otp(login_email=email,otp=otp)
         db.session.add(save_otp)
         db.session.commit()
-        message={"successful":"please enter the otp","verification":f'{self.login_token(email,role)}'}
+        message={"successful":"please enter the otp","verification":self.login_token(email,role)}
         resp=make_response(jsonify(message))
         return resp
     
     def login_token(self,email,role):
         payload={"email":f'{email}',"role":f'{role}',"login":True}
         encode=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
-        return encode
+        return encode.decode('utf-8')

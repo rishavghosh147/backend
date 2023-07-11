@@ -23,7 +23,7 @@ class forget_password(Resource): #done
             send_otp('forget password',data['email'],msg)
             payload={"email":f"{data['email']}","forget":True}
             token=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
-            response=make_response(jsonify({"successful":"please enter the otp","verification":token}))
+            response=make_response(jsonify({"successful":"please enter the otp","verification":token.decode('utf-8')}))
             return response
         else:
             return jsonify({"error":"user does not exist"})

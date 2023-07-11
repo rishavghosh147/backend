@@ -23,7 +23,7 @@ class otp_verify(Resource): #done
                 db.session.add(users)
                 db.session.delete(user)
                 db.session.commit()
-                return jsonify({"success":"user registered successfully "})
+                return jsonify({"successful":"user registered successfully "})
         elif 'login' in verify_type:
             otp=Temp_otp.query.filter_by(login_email=verify_type['email']).first()
             if otp and otp.otp==int(data['otp']):

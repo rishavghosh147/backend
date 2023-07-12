@@ -12,7 +12,7 @@ class veiw_profile(Resource): #done
         if type=="participant":
             email=user_email(participants_secret_key)
             user=User.query.filter_by(email=email).first()
-            return jsonify({"fname":f"{user.fname}","lname":f"{user.lname}","email":f"{user.email}","mobile":user.mobile,"roll":user.roll,"year":user.year,"stream":f"{user.stream}"})
+            return jsonify({"fname":user.fname,"lname":user.lname,"email":user.email,"mobile":user.mobile,"roll":user.roll,"year":user.year,"stream":user.stream})
         elif type=="admin":
             email=user_email(admin_secret_key)
             user=User.query.filter_by(email=email).first()

@@ -8,4 +8,4 @@ from authentication.token_validation import token_validation_common
 class User_type(Resource):
     @token_validation_common
     def post(self,type):
-        return jsonify({"user":f"{type}"})
+        return jsonify({"user":type})

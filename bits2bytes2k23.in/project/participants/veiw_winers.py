@@ -13,10 +13,10 @@ class win(Resource): #done
             for x in winers:
                 user=User.query.filter_by(roll=x.roll).first()
                 win.append(
-                    {"name":f"{user.fname}"+" "+f"{user.lname}",
+                    {"name":user.fname+" "+user.lname,
                     "roll":x.roll,
                     "year":user.year,
-                    "stream":f"{user.stream}",
+                    "stream":user.stream,
                     "position":x.winers}
                 )
         else:
@@ -26,11 +26,11 @@ class win(Resource): #done
                 for y in user:
                     slow=User.query.filter_by(roll=y.roll).first()
                     win.append(
-                        {"name":f"{slow.fname}"+" "+f"{slow.lname}",
+                        {"name":slow.fname+" "+slow.lname,
                         "roll":slow.roll,
                         "year":slow.year,
-                        "stream":f"{slow.stream}",
-                        "team_name":f"{x.team}",
+                        "stream":slow.stream,
+                        "team_name":x.team,
                         "position":x.winers}
                     )
         return jsonify(win)

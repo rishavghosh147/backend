@@ -9,7 +9,8 @@ from key.keys import otp_virify_secret_key,admin_secret_key,participants_secret_
 class otp_verify(Resource): #done
     def post(self):
         if 'verification' in request.headers:
-            header=request.headers.get('verification')
+            temp=request.headers.get('verification')
+            header=json.loads(temp)
         data=json.loads(request.data)
         try:
             verify_type=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])

@@ -20,11 +20,7 @@ class forget_password(Resource): #done
                 us=Temp_otp(login_email=data['email'].lower(),otp=otp,password=generate_password_hash(data['password']))
                 db.session.add(us)
                 db.session.commit()
-                msg=f"hi,{user.fname} this {otp} is for forget password"
-                send_otp('forget password',data['email'],msg)
-                payload={"email":data['email'].lower(),"forget":True}
-                token=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
-                return jsonify({"successful":"please enter the otp","verification":token.decode('utf-8')})
+                return self.common(user.fname,otp,user.email)
         elif 'roll' in data:
             user=User.query.filter_by(roll=int(data['roll'])).first()
             if user and len(data)==2 and data['roll'] and data['password']:
@@ -35,9 +31,12 @@ class forget_password(Resource): #done
                 us=Temp_otp(login_email=user.email,otp=otp,password=generate_password_hash(data['password']))
                 db.session.add(us)
                 db.session.commit()
-                msg=f"hi,{user.fname} this {otp} is for forget password"
-                send_otp('forget password',data['email'],msg)
-                payload={"email":user.email,"forget":True}
-                token=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
-                return jsonify({"successful":"please enter the otp","verification":token.decode('utf-8')})
+                return self.common(user.fname,otp,user.email)
         return jsonify({"error":"user does not exist"})
+    
+    def common(self,fname,otp,email):
+        msg=f"hi,{fname} this {otp} is for forget password"
+        send_otp('forget password',email,msg)
+        payload={"email":email,"forget":True}
+        token=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
+        return jsonify({"successful":"please enter the otp","verification":token.decode('utf-8')})

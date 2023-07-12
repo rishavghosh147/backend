@@ -1,6 +1,6 @@
 from app import app
 from functools import wraps
-from flask import request, jsonify
+from flask import request, jsonify,json
 import jwt
 from datetime import datetime
 from key.keys import admin_secret_key,participants_secret_key,authorization_token_key
@@ -23,12 +23,12 @@ def token_validation_admin(f):
         return f(*args,**kwargs)
     return validation
 
-def token_validation_common(f):
+def token_validation_common(f): #error
     @wraps(f)
     def validation(*args,**kwargs):
-        if not aurtharization(admin_secret_key):
+        if aurtharization(admin_secret_key) is None:
             type="admin"
-        elif not aurtharization(participants_secret_key):
+        elif aurtharization(participants_secret_key) is None:
             type="participant"
         else:
             return jsonify({"error":"you are not verified"})
@@ -41,7 +41,8 @@ def expire():
     return int(time.timestamp())
 
 def aurtharization(secret_key):
-    token=request.headers.get(authorization_token_key)
+    head=request.headers.get(authorization_token_key)
+    token=json.loads(head)
     if not token:
         return jsonify({'error':'the token is missing !!!'})
     try:
@@ -52,6 +53,7 @@ def aurtharization(secret_key):
         return jsonify({"error":"the token is not valid !!!"})
     
 def user_email(secret_key):
-    token=request.headers.get(authorization_token_key)
+    head=request.headers.get(authorization_token_key)
+    token=json.loads(head)
     data=jwt.decode(token,secret_key,algorithms=['HS256'])
     return data['email']

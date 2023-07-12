@@ -57,13 +57,13 @@ class user_signup(Resource): #done
             user=Temp_user(fname=data['fname'].lower(),lname=data['lname'].lower(),email=data['email'].lower(),mobile=int(data['mobile']),roll=roll,password=hash_password,role_id=role,year=int(data['year']),stream=data['stream'].lower(),otp=otp)
 
         msg=f"hello, {data['fname']} this otp {otp} is for sign up verification. Please don't share it with anyone and also don't share your password."
-        send_otp('for sign_up verification',data['email'],msg)
+        send_otp('for sign_up verification',data['email'].lower(),msg)
         db.session.add(user)
         db.session.commit()
 
     def otp_token(self,payload):
         bytecode=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
-        return  bytecode.decode('utf-8')
+        return bytecode.decode('utf-8')
 
 def check_user(email,mobile,roll):
     user=User.query.filter(or_(User.email==email,User.mobile==mobile,User.roll==roll)).all()

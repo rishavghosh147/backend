@@ -35,7 +35,7 @@ class User_login(Resource): #done
         previous=Temp_otp.query.filter_by(login_email=email).first()
         if previous:
             db.session.delete(previous)
-            
+        db.session.commit()
         msg=f"this {otp} is for login veification. please don't share with any one"
         send_otp('login verification',email,msg)
         save_otp=Temp_otp(login_email=email,otp=otp)
@@ -44,6 +44,6 @@ class User_login(Resource): #done
         return jsonify({"successful":"please enter the otp","verification":self.login_token(email,role)})
     
     def login_token(self,email,role):
-        payload={"email":f'{email}',"role":f'{role}',"login":True}
+        payload={"email":email,"role":f'{role}',"login":True}
         encode=jwt.encode(payload,otp_virify_secret_key,algorithm='HS256')
         return encode.decode('utf-8')

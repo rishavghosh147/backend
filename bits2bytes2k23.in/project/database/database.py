@@ -54,11 +54,12 @@ class Temp_user(db.Model):
     otp=db.Column(db.Integer, nullable=False)
     
 class Deleted_users(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
     fname=db.Column(db.String(50), nullable=False)
     lname=db.Column(db.String(50), nullable=False)
-    email=db.Column(db.String(100), primary_key=True, nullable=False)
-    mobile=db.Column(db.Integer, primary_key=True, nullable=False)
-    roll=db.Column(db.Integer, unique=True, nullable=True)
+    email=db.Column(db.String(100), nullable=False)
+    mobile=db.Column(db.Integer,  nullable=False)
+    roll=db.Column(db.Integer, nullable=True)
     year=db.Column(db.Integer, nullable=True)
     stream=db.Column(db.String(10), nullable=True)
     deleted_by=db.Column(db.String(100), db.ForeignKey('user.email'))

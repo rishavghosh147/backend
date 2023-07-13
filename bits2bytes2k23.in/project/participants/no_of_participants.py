@@ -9,8 +9,8 @@ class no_of_participants(Resource): #done
         team=Event.query.filter_by(event_name=data['event_name']).first()
         if team.team ==1:
             count=db.session.query(Team_participate).filter_by(event_name=data['event_name']).group_by(Team_participate.team_name).count()
-            return jsonify({"successful":count})
+            return jsonify({"successfull":count})
         elif team.team==0:
             count=Participants.query.filter_by(event_name=data['event_name']).count()
-            return  jsonify({"successful":count})
+            return  jsonify({"successfull":count})
             

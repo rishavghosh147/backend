@@ -9,8 +9,7 @@ from key.keys import otp_virify_secret_key,admin_secret_key,participants_secret_
 class otp_verify(Resource): #done
     def post(self):
         if 'verification' in request.headers:
-            temp=request.headers.get('verification')
-            header=json.loads(temp)
+            header=request.headers.get('verification')
         data=json.loads(request.data)
         try:
             verify_type=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])
@@ -23,7 +22,7 @@ class otp_verify(Resource): #done
                 db.session.add(users)
                 db.session.delete(user)
                 db.session.commit()
-                return jsonify({"successful":"user registered successfully "})
+                return jsonify({"successfull":"user registered successfully "})
         elif 'login' in verify_type:
             otp=Temp_otp.query.filter_by(login_email=verify_type['email']).first()
             if otp and otp.otp==int(data['otp']):
@@ -35,7 +34,7 @@ class otp_verify(Resource): #done
                 token=self.token_gen(verify_type['email'].lower(),secret_key)
                 db.session.delete(otp)
                 db.session.commit()
-                return jsonify({"successful":"you are loged in successfully","authorization":token})
+                return jsonify({"successfull":"you are loged in successfully","authorization":token})
         elif 'forget' in verify_type:
             otp=Temp_otp.query.filter_by(login_email=verify_type['email'].lower()).first()
             if  otp and otp.otp==int(data['otp']):
@@ -43,7 +42,7 @@ class otp_verify(Resource): #done
                 user.password=otp.password
                 db.session.delete(otp)
                 db.session.commit()
-                return jsonify({"successful":"the password has been changed successfully"})
+                return jsonify({"successfull":"the password has been changed successfully"})
         return jsonify({"error":"you entered a wrong otp !!!"})
     
     def token_gen(self,email,secret_key):

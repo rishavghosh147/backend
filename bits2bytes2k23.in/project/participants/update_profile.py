@@ -19,7 +19,7 @@ class update_profile(Resource): #done
             user.stream=data['stream']
             user.year=int(data['year'])
             db.session.commit()
-            return jsonify({"successful":"profile updated successfully"})
+            return jsonify({"successfull":"profile updated successfully"})
         elif len(data)==3 and data['fname'] and data['lname'] and data['mobile'] and type=="admin":
             email=user_email(admin_secret_key)
             user=User.query.filter_by(email=email).first()
@@ -27,6 +27,6 @@ class update_profile(Resource): #done
             user.lname=data['lname']
             user.mobile=int(data['mobile'])
             db.session.commit()
-            return jsonify({"successful":"profile updated successfully"})
+            return jsonify({"successfull":"profile updated successfully"})
         else:
             return jsonify({"error":"the data is not valid"})

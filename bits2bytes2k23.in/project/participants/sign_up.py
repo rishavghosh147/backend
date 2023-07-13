@@ -36,7 +36,7 @@ class user_signup(Resource): #done
         payload={"email":data['email'],"signup":True}
         token=self.otp_token(payload)
 
-        return jsonify({'successful':'please enter the otp','verification':token})
+        return jsonify({'successfull':'please enter the otp','verification':token})
 
     def temp(self,data,role):
         otp=random.randint(100000,999999)

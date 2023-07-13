@@ -8,7 +8,7 @@ from key.keys import admin_secret_key,participants_secret_key,authorization_toke
 def token_validation_participents(f):
     @wraps(f)
     def validation(*args,**kwargs):
-        check=aurtharization(participants_secret_key)
+        check=authorization(participants_secret_key)
         if check:
             return check
         return f(*args,**kwargs)
@@ -17,7 +17,7 @@ def token_validation_participents(f):
 def token_validation_admin(f):
     @wraps(f)
     def validation(*args,**kwargs):
-        check=aurtharization(admin_secret_key)
+        check=authorization(admin_secret_key)
         if check:
             return check
         return f(*args,**kwargs)
@@ -26,9 +26,9 @@ def token_validation_admin(f):
 def token_validation_common(f): #error
     @wraps(f)
     def validation(*args,**kwargs):
-        if aurtharization(admin_secret_key) is None:
+        if authorization(admin_secret_key) is None:
             type="admin"
-        elif aurtharization(participants_secret_key) is None:
+        elif authorization(participants_secret_key) is None:
             type="participant"
         else:
             return jsonify({"error":"you are not verified"})
@@ -40,11 +40,11 @@ def expire():
     time=datetime.now()
     return int(time.timestamp())
 
-def aurtharization(secret_key):
-    head=request.headers.get(authorization_token_key)
-    token=json.loads(head)
+def authorization(secret_key):
+    token=request.headers.get(authorization_token_key)
     if not token:
         return jsonify({'error':'the token is missing !!!'})
+    # token=json.loads(head)
     try:
         data=jwt.decode(token,secret_key,algorithms=['HS256'])
         if data['expire']< expire():

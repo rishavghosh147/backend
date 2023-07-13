@@ -29,7 +29,7 @@ class post_event(Resource): #done
             event=Event(event_name=data['event_name'],event_date=data['event_date'],about_event=data['about_event'],team=data['team'],event_pic=event_pic.filename)
             db.session.add(event)
             db.session.commit()
-            return jsonify({'successful':'the event post successfully'})
+            return jsonify({'successfull':'the event post successfully'})
 
 
 

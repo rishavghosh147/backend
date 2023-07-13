@@ -19,7 +19,7 @@ class winers(Resource): #done
             user=Winers(roll=int(data['roll']),event_name=data['event_name'],winers=winer)
             db.session.add(user)
             db.session.commit()
-            return jsonify({"success":"successfully added"})
+            return jsonify({"successfull":"successfully added"})
         else:
             ch=Winers.query.filter(Winers.team==data['team_name'],Winers.event_name==data['event_name'],Winers.winers==winer)
             if ch:
@@ -27,5 +27,5 @@ class winers(Resource): #done
             check=Winers(team=data['team_name'],event_name=data['event_name'],winers=winer)
             db.session.add(check)
             db.session.commit()
-            return jsonify({"success":"successfully added"})
+            return jsonify({"successfull":"successfully added"})
 

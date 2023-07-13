@@ -22,7 +22,7 @@ class Participate(Resource): #done
             event=Participants(roll=roll_obj.roll,event_name=data['event_name'])
             db.session.add(event)
             db.session.commit()
-        return jsonify({"successfull":"participated successfully"})
+        return jsonify({"successful":"participated successfully"})
 
 
   

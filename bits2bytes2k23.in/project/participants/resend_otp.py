@@ -21,20 +21,20 @@ class resend_otp(Resource): #done
             db.session.commit()
             msg=f"this {otp} is for login veification. please don't share with any one"
             send_otp('login verification',header['email'],msg)
-            return jsonify({"successfull":"otp has been resend"})
+            return jsonify({"successful":"otp has been resend"})
         elif 'signup' in header:
             user=Temp_user.query.filter_by(email=header['email']).first()
             user.otp=otp
             db.session.commit()
             msg=f"this {otp} is for sign up veification. please don't share with any one"
             send_otp('sign up verification',header['email'],msg)
-            return jsonify({"successfull":"otp has been resend"})
+            return jsonify({"successful":"otp has been resend"})
         elif 'forget' in header:
             user=Temp_otp.query.filter_by(login_email=header['email']).first()
             user.otp=otp
             db.session.commit()
             msg=f"this {otp} is for forget password. please don't share with any one"
             send_otp('forget password verification',header['email'],msg)
-            return jsonify({"successfull":"otp has been resend"})
+            return jsonify({"successful":"otp has been resend"})
         else:
             return jsonify({"error":"invalid request !!!"})

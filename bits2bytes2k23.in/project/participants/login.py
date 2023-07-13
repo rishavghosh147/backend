@@ -41,7 +41,7 @@ class User_login(Resource): #done
         save_otp=Temp_otp(login_email=email,otp=otp)
         db.session.add(save_otp)
         db.session.commit()
-        return jsonify({"successfull":"please enter the otp","verification":self.login_token(email,role)})
+        return jsonify({"successful":"please enter the otp","verification":self.login_token(email,role)})
     
     def login_token(self,email,role):
         payload={"email":email,"role":f'{role}',"login":True}

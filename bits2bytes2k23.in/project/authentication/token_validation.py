@@ -41,10 +41,10 @@ def expire():
     return int(time.timestamp())
 
 def authorization(secret_key):
-    token=request.headers.get(authorization_token_key)
-    if not token:
+    header=request.headers.get(authorization_token_key)
+    if not header:
         return jsonify({'error':'the token is missing !!!'})
-    # token=json.loads(head)
+    token=json.loads(header)
     try:
         data=jwt.decode(token,secret_key,algorithms=['HS256'])
         if data['expire']< expire():

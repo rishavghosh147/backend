@@ -41,10 +41,10 @@ def expire():
     return int(time.timestamp())
 
 def authorization(secret_key):
-    header=request.headers.get(authorization_token_key)
-    if not header:
-        return jsonify({'error':'the token is missing !!!'})
-    token=json.loads(header)
+    token=request.headers.get(authorization_token_key)
+    if not token:
+        return False
+    # token=json.loads(header)
     try:
         data=jwt.decode(token,secret_key,algorithms=['HS256'])
         if data['expire']< expire():
@@ -54,6 +54,5 @@ def authorization(secret_key):
     
 def user_email(secret_key):
     head=request.headers.get(authorization_token_key)
-    token=json.loads(head)
-    data=jwt.decode(token,secret_key,algorithms=['HS256'])
+    data=jwt.decode(head,secret_key,algorithms=['HS256'])
     return data['email']

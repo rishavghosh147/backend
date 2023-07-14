@@ -10,4 +10,4 @@ otp_virify_secret_key='otpverify'
 authorization_token_key='authorization'
 
 #secret_key for admin signup
-secret_key=20232023
+secret_key=7001501

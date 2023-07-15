@@ -12,7 +12,7 @@ class otp_verify(Resource): #done
             header=request.headers.get('verification')
             # header=json.loads(token)
         data=json.loads(request.data)
-        if data['otp']:
+        if not data['otp']:
             return jsonify({"error":"please enter a valid otp !!!"})
         try:
             verify_type=jwt.decode(header,otp_virify_secret_key,algorithms=['HS256'])

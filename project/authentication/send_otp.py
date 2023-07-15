@@ -19,5 +19,14 @@ def send_otp(subject,recipient,body):
     msg.body=body
     mail.send(msg)
 
+def send_mail(subject,recipient,body,file):
+    msg=Message(subject=subject,sender='bits2bytes2k23@gmail.com',recipients=[recipient])
+    with app.open_resource(file) as fp:
+        msg.attach(file.filename, 'application/octet-stream', fp.read())
+    msg.body=body
+    mail.send(msg)
+
+
+
 
  

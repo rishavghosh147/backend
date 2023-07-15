@@ -22,14 +22,13 @@ class post_event(Resource): #done
         team=request.form['team']
         
         temp=Event.query.filter_by(event_name=event_name.lower()).first()
-
         if temp:
             return jsonify({'error':'the event already exist'})
         else:
             # event_pic.filename=event_name+event_pic.filename[-4:]
             # event_pic.save('images/'+event_pic.filename)
             # link=post(event_pic)
-            link='https://i.imgur.com/8LYM8ZK.jpeg'
+            link="https://i.imgur.com/8LYM8ZK.jpeg"
             event=Event(event_name=event_name,event_date=event_date,about_event=about_event,team=team,event_pic=link,coordinator=coordinator,mobile=int(mobile))
             db.session.add(event)
             db.session.commit()

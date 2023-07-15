@@ -13,7 +13,7 @@ class veiw_events(Resource): #done
                 "event_pic":x.event_pic,
                 "event_date":x.event_date,
                 "about_event":x.about_event,
-                "coordinator":x.coordinetor,
+                "coordinator":x.coordinator,
                 "mobile":x.mobile,
                 "type":x.team
             })

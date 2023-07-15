@@ -11,7 +11,7 @@ class Event(db.Model):
     event_pic=db.Column(db.String(100), unique=True, nullable=False)
     event_date=db.Column(db.String(50), nullable=False)
     about_event=db.Column(db.String(500), nullable=False)
-    coordinetor=db.Column(db.String(50), nullable=False)
+    coordinator=db.Column(db.String(50), nullable=False)
     mobile=db.Column(db.Integer, nullable=False)
     team=db.Column(db.Integer, nullable=False)
 

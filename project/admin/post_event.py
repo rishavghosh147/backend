@@ -30,7 +30,7 @@ class post_event(Resource): #done
             # event_pic.save('images/'+event_pic.filename)
             # link=post(event_pic)
             link='https://i.imgur.com/8LYM8ZK.jpeg'
-            event=Event(event_name=event_name,event_date=event_date,about_event=about_event,team=team,event_pic=link,coordinetor=coordinator,mobile=int(mobile))
+            event=Event(event_name=event_name,event_date=event_date,about_event=about_event,team=team,event_pic=link,coordinator=coordinator,mobile=int(mobile))
             db.session.add(event)
             db.session.commit()
             return jsonify({'successful':'the event post successfully'})

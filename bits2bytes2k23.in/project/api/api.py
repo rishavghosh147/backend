@@ -20,7 +20,6 @@ from admin.view_deleted_user import veiw_deleted_user
 from admin.view_participents import veiw_participents
 from admin.post_winers import winers
 from admin.all_participants import users
-from image_send.send_image import send_image
 from participants.user_type import User_type
 from flask_cors import CORS
 
@@ -36,7 +35,6 @@ api.add_resource(veiw_profile,'/view_profile/') #this api is for veiw participan
 api.add_resource(resend_otp,'/resend_otp/') #this api is for resend the otp 1
 api.add_resource(update_profile,'/update_profile/') #this api is for update participants profile 1
 api.add_resource(veiw_events,'/view_event/') #to veiw all the event 1
-api.add_resource(send_image,'/send_image/') #this api is for send image 1
 api.add_resource(Participate,'/participate/') #participate any event 1
 api.add_resource(praricipated_or_not,'/participated_or_not/') #this api is for check the participant is participated or not on a particular event 1
 api.add_resource(no_of_participants,'/no_of_participants/') #this api is for find the no of participants on a particular event 1

@@ -33,4 +33,5 @@ update
 Werkzeug
 WTForms
 djangorestframework-jwt
+gunicorn
 requests

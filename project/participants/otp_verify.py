@@ -9,8 +9,8 @@ from key.keys import otp_virify_secret_key,admin_secret_key,participants_secret_
 class otp_verify(Resource): #done
     def post(self):
         if 'verification' in request.headers:
-            header=request.headers.get('verification')
-            # header=json.loads(token)
+            token=request.headers.get('verification')
+            header=json.loads(token)
         data=json.loads(request.data)
         if not data['otp']:
             return jsonify({"error":"please enter a valid otp !!!"})

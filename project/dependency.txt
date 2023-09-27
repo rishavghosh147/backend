@@ -21,7 +21,7 @@ numpy
 openpyxl
 pandas
 pycparser
-PyJWT
+PyJWT==2.0.0
 python-dateutil
 pytz
 six
@@ -32,6 +32,6 @@ tzdata
 update
 Werkzeug
 WTForms
-djangorestframework-jwt
+djangorestframework-jwt==1.11.0
 gunicorn
 requests

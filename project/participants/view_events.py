@@ -1,9 +1,10 @@
-from app import app
 from database.database import Event
-from flask import jsonify
+from for_all.response import resp
 from flask_restful import Resource
+from participants.data_validity import view_events
+from marshmallow import ValidationError
 
-class veiw_events(Resource): #done
+class veiw_events(Resource): #checked
     def post(self):
         events1=Event.query.all()
         events=[]
@@ -15,7 +16,11 @@ class veiw_events(Resource): #done
                 "about_event":x.about_event,
                 "coordinator":x.coordinator,
                 "mobile":x.mobile,
-                "type":x.team
-            })
-        return jsonify(events)
+                "team":x.team})
+        marshmallow=view_events(many=True)
+        try:
+            data=marshmallow.dumps(events)
+        except ValidationError as e:
+            return f'{e}'
+        return resp(data,200)
    

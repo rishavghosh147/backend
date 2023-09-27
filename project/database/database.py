@@ -27,20 +27,25 @@ class User(db.Model):
     stream=db.Column(db.String(10), nullable=True)
 
     participants=db.relationship('Participants',backref='parti',uselist=False,cascade='all,delete')
-    participants=db.relationship('Team_participate',backref='teamparti',uselist=False,cascade='all,delete')
+    participants=db.relationship('Team_data',backref='teamparti',uselist=False,cascade='all,delete')
     participants=db.relationship('Winers',backref='win',uselist=False,cascade='all,delete')
 
 class Participants(db.Model):
     id=db.Column(db.Integer, primary_key=True)
-    roll=db.Column(db.Integer, db.ForeignKey('user.roll'), nullable=False,unique=False) 
+    roll=db.Column(db.Integer, db.ForeignKey('user.roll'), nullable=False, unique=False) 
     event_name=db.Column(db.String(50), db.ForeignKey('event.event_name'), nullable=False)
- 
+
+class Team_data(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    _id=db.Column(db.Integer, db.ForeignKey('team_participate.id'), nullable=False)
+    roll=db.Column(db.Integer, db.ForeignKey('user.roll'), nullable=False)
 
 class Team_participate(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    roll=db.Column(db.Integer, db.ForeignKey('user.roll'), nullable=False) 
+    id=db.Column(db.Integer, primary_key=True) 
     event_name=db.Column(db.String(50), db.ForeignKey('event.event_name'), nullable=False)
     team_name=db.Column(db.String(100), nullable=False)
+    team_key=db.Column(db.Integer, nullable=False)
+    team_leader=db.Column(db.String, nullable=False)
 
 class Temp_user(db.Model):
     fname=db.Column(db.String(50), nullable=False)
@@ -69,9 +74,9 @@ class Deleted_users(db.Model):
 class Winers(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     roll=db.Column(db.Integer, db.ForeignKey('user.roll'), nullable=True)
-    team=db.Column(db.String(100), db.ForeignKey('team_participate.team_name'), nullable=True)
-    event_name=db.Column(db.String(100), db.ForeignKey('event.event_name'), nullable=False)
-    winers=db.Column(db.Integer, nullable=True)
+    team_name=db.Column(db.String(100), db.ForeignKey('team_participate.team_name'), nullable=True)
+    marks=db.Column(db.Integer(), nullable=False)
+    event_name=db.Column(db.String(100), nullable=False)
 
 class Temp_otp(db.Model):
     login_email=db.Column(db.String(100), db.ForeignKey('user.email'), primary_key=True, nullable=True)

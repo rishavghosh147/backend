@@ -1,10 +1,11 @@
-from app import app
-from database.database import Deleted_users,db
+from database.database import Deleted_users
 from flask_restful import Resource
-from flask import jsonify
+from for_all.response import resp
 from authentication.token_validation import token_validation_admin
+from admin.data_validity import view_deleted_user
+from marshmallow import ValidationError
 
-class veiw_deleted_user(Resource): #done
+class veiw_deleted_user(Resource): #checked
     @token_validation_admin
     def post(self):
         data=Deleted_users.query.all()
@@ -20,4 +21,9 @@ class veiw_deleted_user(Resource): #done
                 "stream":x.stream,
                 "deleted_by":x.deleted_by
                 })
-        return jsonify(users)
+        marshmallow=view_deleted_user(many=True)
+        try:
+            data=marshmallow.dumps(users)
+        except ValidationError as e:
+            return f'{e}'
+        return resp(data,200)

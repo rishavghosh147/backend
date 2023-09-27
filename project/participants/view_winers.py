@@ -1,15 +1,22 @@
-from app import app
 from flask_restful import Resource
-from flask import request,json,jsonify
+from flask import request
 from database.database import Winers,User,Event,Team_participate
+from participants.data_validity import EventName,Team_winer
+from for_all.response import resp
+from participants.data_validity import view_winers
+from marshmallow import ValidationError
 
 class win(Resource): #done
     def post(self):
-        data=json.loads(request.data)
+        marshmallow=EventName()
+        try:
+            data=marshmallow.loads(request.data)
+        except ValidationError as e:
+            return f'{e}'
         event=Event.query.filter_by(event_name=data['event_name']).first()
-        winers=Winers.query.filter_by(event_name=data['event_name']).order_by(Winers.winers).all()
         win=[]
         if event.team==0:
+            winers=Winers.query.filter_by(event_name=data['event_name']).order_by(Winers.marks.desc()).all()
             for x in winers:
                 user=User.query.filter_by(roll=x.roll).first()
                 win.append(
@@ -17,21 +24,23 @@ class win(Resource): #done
                     "roll":x.roll,
                     "year":user.year,
                     "stream":user.stream,
-                    "position":x.winers}
-                )
+                    "marks":x.winers})
+            marshmallow=view_winers(many=True)
+            try:
+                data=marshmallow.dumps(win)
+            except ValidationError as e:
+                return f'{e}'
         else:
-            winer=Winers.query.filter_by(event_name=data['event_name']).order_by(Winers.winers).all()
+            winer=Winers.query.filter_by(event_name=data['event_name']).order_by(Winers.marks.desc()).all()
             for x in winer:
-                user=Team_participate.query.filter(Team_participate.event_name==x.event_name,Team_participate.team_name==x.team).all()
-                for y in user:
-                    slow=User.query.filter_by(roll=y.roll).first()
-                    win.append(
-                        {"name":slow.fname+" "+slow.lname,
-                        "roll":slow.roll,
-                        "year":slow.year,
-                        "stream":slow.stream,
-                        "team_name":x.team,
-                        "position":x.winers}
-                    )
-        return jsonify(win)
+                win.append({
+                        "team_name":x.team_name,
+                        "marks":x.marks
+                    })
+                marshmallow=Team_winer(many=True)
+                try:
+                    data=marshmallow.dumps(win)
+                except ValidationError as e:
+                    return f'{e}'
+        return resp(data,200)
         
